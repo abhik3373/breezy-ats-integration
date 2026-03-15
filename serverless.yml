@@ -1,0 +1,72 @@
+service: breezy-ats-integration
+useDotenv: true
+
+# ──────────────────────────────────────────────
+# PROVIDER SETTINGS
+# ──────────────────────────────────────────────
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  stage: dev
+
+  # All secrets come from .env, not hardcoded
+  environment:
+    BREEZY_API_KEY: ${env:BREEZY_API_KEY}
+    BREEZY_COMPANY_ID: ${env:BREEZY_COMPANY_ID}
+    BREEZY_BASE_URL: ${env:BREEZY_BASE_URL, 'https://api.breezy.hr/v3'}
+
+# ──────────────────────────────────────────────
+# LAMBDA FUNCTIONS (3 API Endpoints)
+# ──────────────────────────────────────────────
+functions:
+
+  # GET /jobs — List all open positions from Breezy HR
+  getJobs:
+    handler: handler.get_jobs
+    description: Fetch all open job positions from Breezy HR
+    events:
+      - http:
+          path: jobs
+          method: get
+          cors: true
+
+  # POST /candidates — Apply a candidate to a job
+  createCandidate:
+    handler: handler.create_candidate
+    description: Create a new candidate in Breezy HR and attach to a job
+    events:
+      - http:
+          path: candidates
+          method: post
+          cors: true
+
+  # GET /applications?job_id=... — List all applicants for a job
+  getApplications:
+    handler: handler.get_applications
+    description: List all candidates applied to a specific job
+    events:
+      - http:
+          path: applications
+          method: get
+          cors: true
+
+# ──────────────────────────────────────────────
+# PLUGINS
+# ──────────────────────────────────────────────
+plugins:
+  - serverless-offline           # Run locally without real AWS
+  - serverless-python-requirements
+
+# ──────────────────────────────────────────────
+# PLUGIN SETTINGS
+# ──────────────────────────────────────────────
+custom:
+  serverless-offline:
+    httpPort: 3000
+    host: localhost
+
+  pythonRequirements:
+    dockerizePip: non-linux    # Auto-install Python deps
+    zip: true
+    slim: true

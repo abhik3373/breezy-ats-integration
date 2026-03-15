@@ -1,0 +1,14 @@
+{
+  "name": "breezy-ats-integration",
+  "version": "1.0.0",
+  "description": "ATS Integration Microservice using Breezy HR API",
+  "scripts": {
+    "start": "serverless offline",
+    "deploy": "serverless deploy"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.3.0",
+    "serverless-python-requirements": "^6.1.0"
+  }
+}

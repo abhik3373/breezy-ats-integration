@@ -1,0 +1,25 @@
+# Environment secrets - NEVER commit this
+.env
+
+# Node modules
+node_modules/
+.serverless/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
